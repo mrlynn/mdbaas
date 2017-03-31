@@ -1,3 +1,5 @@
+![MDBAAS - MongoDB as a Service](https://raw.githubusercontent.com/mrlynn/mdbaas/mdbaas/public/images/slider-image1.png)
+
 # MongoDB as a Service (MDBAAS)
 
 This repo was created as a demonstration for a talk given at MongoDB World 2017 by Michael Lynn
@@ -85,4 +87,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 * Hat tip to anyone who's code was used
 * Inspiration
 * etc
-
