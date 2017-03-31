@@ -1,0 +1,27 @@
+{{#if hasErrors }}
+<div class="alert alert-danger">
+  {{# each messages }}
+    <p>{{this}}</p>
+    {{/each}}
+</div>
+{{/if}}
+{{# each products }}
+<div class="row">
+  {{# each this }}
+	<div class="col-sm-6 col-md-3">
+		<div class="thumbnail">
+			<img class="img-responsive" src="{{this.imagePath}}" alt="...">
+			<div class="caption">
+				<h3>{{this.title}}</h3>
+				<p>{{this.description}}<p>
+					<div class="clearfix">
+						<div class="price text-center">${{this.price}}/hr</div>
+						<a href="/product/{{this.slug}}" class="btn btn-success text-center" role="button">Customize and Launch</a>
+					</div>
+				</p>
+			</div>
+		</div>
+	</div>
+  {{/each}}
+</div>
+{{/each}}

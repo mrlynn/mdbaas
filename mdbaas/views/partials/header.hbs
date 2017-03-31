@@ -1,0 +1,44 @@
+<nav class="navbar navbar-default navbar-static-top">
+	<div class="container">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+      </button>
+			<a class="navbar-brand" href="/"><img src="/images/logo_mdbaas.png" alt=""></a>
+		</div>
+		<div id="navbar" class="navbar-collapse collapse">
+			<ul class="nav navbar-nav">
+				<li class="{{# if active.home}}active{{/if}}"><a href="/">Home</a></li>
+				<li class="{{# if active.catalog}}active{{/if}}"><a href="/catalog">Service Catalog</a></li>
+			</ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+          <a href="/profile" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user" aria-hidden="true"></i> Account <span class="caret"></span></a>
+					<ul class="dropdown-menu">
+						{{#if login }}
+							<li><a href="/instances">Running instances</a></li>
+							<li><a href="/favorites">Favorites</a></li>
+							<li role="separator" class="divider"></li>
+							<li class="dropdown-header">Request New Instances</li>
+							<li><a href="#">MongoDB - Small</a></li>
+							<li><a href="#">MongoDB - Medium</a></li>
+							<li><a href="#">MongoDB - Large</a></li>
+							<li><a href="#">MongoDB - Extra Large</a></li>
+              <li role="separator" class="divider"></li>
+              <li><a href="/user/logout">Logout</a></li>
+							{{ else }}
+							<li><a href="/user/signup">Sign Up</a></li>
+							<li><a href="/user/signin">Sign In</a></li>
+						{{/if}}
+					</ul>
+
+				</li>
+				{{!-- <li><a href="../navbar-fixed-top/">Fixed top</a></li> --}}
+			</ul>
+		</div>
+		<!--/.nav-collapse -->
+	</div>
+</nav>
