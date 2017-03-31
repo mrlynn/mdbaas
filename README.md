@@ -1,4 +1,4 @@
-![MDBAAS - MongoDB as a Service](https://raw.githubusercontent.com/mrlynn/mdbaas/mdbaas/public/images/slider-image1.png)
+![MDBAAS - MongoDB as a Service](https://github.com/mrlynn/mdbaas/blob/master/mdbaas/public/images/slider-image1.png)
 
 # MongoDB as a Service (MDBAAS)
 
