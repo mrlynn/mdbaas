@@ -35,38 +35,34 @@ $ echo npm start
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
 
+## Creating service catalog products
 
-End with an example of getting some data out of the system or using it for a little demo
+The system is designed to show how you may build an internal MongoDB as a service offering in your company.  I've created a sample set of MongoDB services based on t-shirt sizes.  In order to create these examples, you should have MongoDB running on the same system where you installed the code from this repo.
 
-## Running the tests
+Next, change to the project directory (at the same level as app.js) and type:
 
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
+```sh
+$ node data/create-products.js
 ```
 
-### And coding style tests
+The cursor should just return after a second or two.  This nodeJS script will create the following products for your demo catalog:
 
-Explain what these tests test and why
+| Product    | Description                     |
+|------------|---------------------------------|
+| Small      | Small MongoDB Instance          |
+| Medium     | Medium MongoDB Instance         |
+| Large      | Large MongoDB Instance          |
+| Extra Lg   | Extra Lg MongoDB Instance       |
+| OpsManager | Ops Manager Instance            |
 
-```
-Give an example
-```
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+TBD
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+TBD
 
 ## Contributing
 
@@ -75,8 +71,6 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 ## Authors
 
 * **Michael Lynn** - *Initial work* - [MongoDB](https://mongodb.com/)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
 
 ## License
 
