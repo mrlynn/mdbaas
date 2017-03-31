@@ -58,11 +58,11 @@ The cursor should just return after a second or two.  This nodeJS script will cr
 
 ## Deployment
 
-TBD
+* TBD
 
 ## Built With
 
-TBD
+* TBD
 
 ## Contributing
 
@@ -78,6 +78,4 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+* TBD
