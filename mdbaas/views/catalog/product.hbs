@@ -9,40 +9,57 @@
 			<h5 style="color:#337ab7"><a href="#">{{product.title}}</a> · <small style="color:#337ab7"></small></h5>
 
 			<!-- Precios -->
+			<form action='/instance/launch' method='POST'>
 			<h6 class="title-price"><small>Base Hourly Price</small></h6>
 			<h3 style="margin-top:0px;">${{product.price}}</h3>
-      <small>{{product.deploymentNotes}}</small>
+			<input type=hidden name='productId' value='{{product._id}}'>
+			<input type=hidden name='productslug' value='{{product.slug}}'>
+			<small>{{product.deploymentNotes}}</small>
 			<!-- Detalles especificos del producto -->
 			<div class="section">
 				<h6 class="title-attr" style="margin-top:15px;"><small>Project Name</small></h6>
-					<input type="text" class='form-control' name='project'>
+				<input type="text" class='form-control' name='project'>
 
 			</div>
-      <div class="section">
-        <h6 class="title-attr" style="margin-top:15px;"><small>Expense Code</small></h6>
-          <input type="text" class='form-control' name='expenseCode' value='{{user.expenseCode}}'>
+			<div class="section">
+				<h6 class="title-attr" style="margin-top:15px;"><small>Expense Code</small></h6>
+				<input type="text" class='form-control' name='expenseCode' value='{{user.expenseCode}}'>
 
-      </div>
-      <div class="section" style="padding-bottom:5px;">
+			</div>
+			<div class="section" style="padding-bottom:5px;">
 				<h6 class="title-attr"><small>Memory</small></h6>
-				<div>
-					<div class="attr2">2 GB</div>
-					<div class="attr2">4 GB</div>
+				<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-default active">
+    				<input type="radio" name="memory" id="option1" autocomplete="off" checked=""> 2GB
+  				</label>
+					<label class="btn btn-default">
+				    <input type="radio" name="memory" id="option2" autocomplete="off"> 4GB
+				  </label>
+					<label class="btn btn-default">
+				    <input type="radio" name="memory" id="option3" autocomplete="off"> 8GB
+				  </label>
 				</div>
 			</div>
 			<div class="section" style="padding-bottom:20px;">
 				<h6 class="title-attr"><small>Storage (GB)</small></h6>
-				<div>
-					<div class="btn-minus"><span class="glyphicon glyphicon-minus"></span></div>
-					<input value="6" />
-					<div class="btn-plus"><span class="glyphicon glyphicon-plus"></span></div>
+				<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-default active">
+    				<input type="radio" name="storage" id="option1" autocomplete="off" checked=""> 12GB
+  				</label>
+					<label class="btn btn-default">
+				    <input type="radio" name="storage" id="option2" autocomplete="off"> 20GB
+				  </label>
+					<label class="btn btn-default">
+				    <input type="radio" name="storage" id="option3" autocomplete="off"> 40GB
+				  </label>
 				</div>
 			</div>
 
 			<div class="section" style="padding-bottom:20px;">
-				<button class="btn btn-success"><span style="margin-right:20px" class="fa fa-rocket" aria-hidden="true"></span>Launch Instance</button>
+				<button role='submit' class="btn btn-success"><span style="margin-right:20px" class="fa fa-rocket" aria-hidden="true"></span>Launch Instance</button>
 				<h6><a href="#"><span class="glyphicon glyphicon-heart-empty" style="cursor:pointer;"></span> Favorite</a></h6>
 			</div>
+		</form>
 		</div>
 	</div>
 </div>

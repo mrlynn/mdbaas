@@ -2,7 +2,7 @@
 
 # MongoDB as a Service (MDBAAS)
 
-This repo was created as a demonstration for a talk given at MongoDB World 2017 by Michael Lynn
+This repo was created as a demonstration for a talk (to be) given at MongoDB World 2017 by Michael Lynn
 
 ## Getting Started
 

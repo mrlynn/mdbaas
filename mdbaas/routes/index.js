@@ -4,10 +4,10 @@ var Product = require('../models/product');
 var mongoose = require('mongoose');
 var dotenv = require('dotenv');
 var chalk = require('chalk');
-var csrf = require('csurf');
-
-var csrfProtection = csrf();
-router.use(csrfProtection);
+// var csrf = require('csurf');
+//
+// var csrfProtection = csrf();
+// router.use(csrfProtection);
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -40,7 +40,7 @@ router.get('/catalog', function(req, res, next) {
 
 });
 /* Get Product Page */
-router.get('/product/:slug', function(req, res, next) {
+router.get('/product/:slug', isLoggedIn, function(req, res, next) {
   Product.findOne({slug: req.params.slug}, function (err,doc) {
     if (err || !doc) {
       req.flash('error', 'Cannot locate product');
@@ -55,3 +55,18 @@ router.get('/product/:slug', function(req, res, next) {
 
 
 module.exports = router;
+
+
+function isLoggedIn(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/user/signin');
+}
+
+function notLoggedIn(req, res, next) {
+  if (!req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
+}

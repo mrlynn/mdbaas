@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars');
 var routes = require('./routes/index');
+var instances = require('./routes/instances');
 var api = require('./routes/api');
 var users = require('./routes/users');
 var mongoose = require('mongoose');
@@ -69,9 +70,10 @@ app.use(function(req, res, next) {
   next();
 })
 
-app.use('/', routes);
 app.use('/user', users);
+app.use('/instance', instances);
 app.use('/api', api);
+app.use('/', routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

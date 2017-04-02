@@ -10,7 +10,19 @@ var schema = new Schema({
 	status: {
 		type: String
 	},
+	instanceType: {
+		type: String,
+		required: false
+	},
+	instanceCount: {
+		type: Number,
+		required: false
+	},
 	imagePath: {
+		type: String,
+		required: false
+	},
+	ami: {
 		type: String,
 		required: false
 	},
