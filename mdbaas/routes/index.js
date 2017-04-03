@@ -18,6 +18,7 @@ router.get('/', function(req, res, next) {
     }
   });
 });
+
 /* GET catalog page. */
 router.get('/catalog', function(req, res, next) {
   var messages = req.flash('error');
@@ -47,15 +48,14 @@ router.get('/product/:slug', isLoggedIn, function(req, res, next) {
       return res.redirect('/catalog');
     }
     res.render('catalog/product', {
+      user: req.user,
       title: doc.title,
       product: doc
     })
   })
 })
 
-
 module.exports = router;
-
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated()) {
