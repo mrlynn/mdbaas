@@ -38,8 +38,8 @@ router.get('/catalog', function(req, res, next) {
       hasErrors: messages
     });
   });
-
 });
+
 /* Get Product Page */
 router.get('/product/:slug', isLoggedIn, function(req, res, next) {
   Product.findOne({slug: req.params.slug}, function (err,doc) {

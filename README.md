@@ -4,11 +4,52 @@
 
 This repo was created as a demonstration for a talk (to be) given at MongoDB World 2017 by Michael Lynn
 
+## What is MongoDB as a Service?
+
+Let's break the term down...
+
+### MongoDB
+
+We know that __MongoDB__ is a database software platform based on __NoSQL__.
+
+### as a Service
+
+This phrase means that whatever words precede will be vended in a an on-demand manner.  There are several characteristics (requirements) of an "as a service" offering.
+
+__On-demand__
+
+To be an as-a-service offering, the product or service should be available to customers immediately (or close) to their demand for said product or service.
+
+This can represent a major challenge when talking about databases.  In order to be able to provide on-demand service, you may have to pre-provision hardware, or develop some mechanism to enable you to deploy hardware and operating systems in an extremely rapid fashion.
+
+__Broad Access__
+
+TBD
+
+__Resource Pooling__
+
+TBD
+
+__Rapid Elasticity__
+
+TBD
+
+__Measured Service__
+
+TBD
+
+
+## Why?
+
+There are countless ways to implement Database as a Service.  What's contained in this repository represents one approach... maybe not even the most efficient, or effective method.  In fact, as an employee of __MongoDB__, I feel compelled to mention the fact that this problem has been solved... not only solved - but solved in an extremely effective, and efficient manner.  You can use this service to satisfy your own __MongoDB as a Service__ offering.  This may not give you the flexibility or control you require to vend this service to your internal users.  THAT is precisely why this talk, and this repository exist.
+
 ## Getting Started
 
 If you want to create your own MongoDB as a Service, you may use this project as a starting point.  You will need the following in order to proceed:
 
 ### Prerequisites
+
+If you intend to start building your own MongoDB as a Service offering to your internal customers, it will be necessary for you to have the following components in place.
 
 * Knowledge of the MEAN Stack
 
@@ -17,6 +58,7 @@ This project was written using NodeJS, ExpressJS and MongoDB.
 * An AWS Account
 
 Because I can't know what type of hardware you have available, I chose to create this demo system leveraging AWS, more specifically, EC2 instances.
+
 
 ### Installing
 
