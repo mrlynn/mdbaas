@@ -24,19 +24,19 @@ This can represent a major challenge when talking about databases.  In order to 
 
 __Broad Access__
 
-TBD
+Consumer has access across a variety of networks / devices.
 
 __Resource Pooling__
 
-TBD
+Provider compute resources are shared across many requesters.
 
 __Rapid Elasticity__
 
-TBD
+Compute resources can be scaled rapidly outward/inward commensurate with demand.
 
 __Measured Service__
 
-TBD
+Resource utilization is monitored, controlled and reported.
 
 
 ## Why does this exist?
@@ -51,7 +51,7 @@ RDBMS systems were created during a time when computing resources were extremely
 
 MongoDB was created to address the gap between the world of relational database technologies and the world we live in today - where the volume, velocity and variety of data is quite different than when RDBMS was created.
 
-__Flexibility__
+####Flexibility####
 
 | RDBMS                        |         MongoDB                     |
 |------------------------------|------------------------------|
@@ -129,7 +129,10 @@ The cursor should just return after a second or two.  This nodeJS script will cr
 
 ## Built With
 
-* TBD
+* [NodeJS](http://nodejs.com)
+* [AWS SDK](https://aws.amazon.com/sdk-for-node-js/)
+* [ExpressJS](https://expressjs.com/)
+* [MongoDB](http://mongodb.com)
 
 ## Contributing
 
