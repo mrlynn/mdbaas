@@ -38,7 +38,6 @@ __Measured Service__
 
 Resource utilization is monitored, controlled and reported.
 
-
 ## Why does this exist?
 
 There are countless ways to implement Database as a Service.  What's contained in this repository represents one approach... maybe not even the most efficient, or effective method.  In fact, as an employee of __MongoDB__, I feel compelled to mention the fact that this problem has been solved... not only solved - but solved in an extremely effective, and efficient manner.  You can use this service to satisfy your own __MongoDB as a Service__ offering.  This may not give you the flexibility or control you require to vend this service to your internal users.  THAT is precisely why this talk, and this repository exist.
@@ -47,7 +46,7 @@ There are countless ways to implement Database as a Service.  What's contained i
 
 NoSQL solutions address a very import gap that existed in the market.  MongoDB was created to specifically address the gap in features that was created by the changing technology world.  Prior to NoSQL and MongoDB, the data world was dominated by Relational Database Management Systems (RDBMS).  
 
-RDBMS systems were created during a time when computing resources were extremely expensive.  Disk, memory and CPU were massively expensive, especially in relation to the compensation we paid to the developers and dba's responsible for developing, and managing this data. 
+RDBMS systems were created during a time when computing resources were extremely expensive.  Disk, memory and CPU were massively expensive, especially in relation to the compensation we paid to the developers and dba's responsible for developing, and managing this data.
 
 MongoDB was created to address the gap between the world of relational database technologies and the world we live in today - where the volume, velocity and variety of data is quite different than when RDBMS was created.
 
@@ -84,6 +83,21 @@ This project was written using NodeJS, ExpressJS and MongoDB.
 
 Because I can't know what type of hardware you have available, I chose to create this demo system leveraging AWS, more specifically, EC2 instances.
 
+* An AWS Key ID, and secret access key
+
+## Basic Configuration
+
+You need to set up your AWS security credentials before the sample code is able
+to connect to AWS. You can do this by creating a file named "credentials" at ~/.aws/
+(`C:\Users\USER_NAME\.aws\` for Windows users) and saving the following lines in the file:
+
+    [default]
+    aws_access_key_id = <your access key id>
+    aws_secret_access_key = <your secret key>
+
+See the [Security Credentials](http://aws.amazon.com/security-credentials) page
+for more information on getting your keys. For more information on configuring `boto3`,
+check out the Quickstart section in the [developer guide](https://boto3.readthedocs.org/en/latest/guide/quickstart.html).
 
 ### Installing
 
