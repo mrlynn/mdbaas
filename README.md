@@ -50,7 +50,7 @@ RDBMS systems were created during a time when computing resources were extremely
 
 MongoDB was created to address the gap between the world of relational database technologies and the world we live in today - where the volume, velocity and variety of data is quite different than when RDBMS was created.
 
-####Flexibility####
+__Flexibility__
 
 | RDBMS                        |         MongoDB                     |
 |------------------------------|------------------------------|
