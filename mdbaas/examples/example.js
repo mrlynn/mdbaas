@@ -1,3 +1,7 @@
+/*
+  This is just an example hard coded ec2 deployment script
+*/
+
 var express = require('express');
 var router = express.Router();
 

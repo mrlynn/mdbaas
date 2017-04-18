@@ -2,14 +2,15 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
-
 var userSchema = new Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   expenseCode: { type: String, required: false},
   department: { type: String, required: false},
   first_name: { type: String, required: false},
-  last_name: { type: String, required: false}
+  last_name: { type: String, required: false},
+  instances: [{instanceId: String}, { _id: false}],
+  keyName: { type: String, required: false}
 });
 
 userSchema.methods.encryptPassword = function(password) {

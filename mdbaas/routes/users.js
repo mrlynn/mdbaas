@@ -40,13 +40,14 @@ router.post('/signup', passport.authenticate('local.signup', {
 router.get('/profile', isLoggedIn, function (req, res, next) {
 	var successMsg = req.flash('success')[0];
 	var errorMsg = req.flash('error')[0];
-	res.render('user/profile', {
-		user: req.user,
-		errorMsg: errorMsg,
-		noErrorMsg: !errorMsg,
-		successMsg: successMsg,
-		noMessage: !successMsg
-	});
+	// res.render('instances', {
+	// 	user: req.user,
+	// 	errorMsg: errorMsg,
+	// 	noErrorMsg: !errorMsg,
+	// 	successMsg: successMsg,
+	// 	noMessage: !successMsg
+	// });
+  res.redirect('/instance');
 });
 
 router.get('/logout', function(req, res, next) {

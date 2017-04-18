@@ -1,0 +1,64 @@
+---
+# tasks file for mlynn.mongodb-opsmgr
+
+- name: Copy repo
+  copy: src=mongodb.repo dest=/etc/yum.repos.d/mongodb.repo owner=root group=root mode="u=rw,g=r,o=r"
+
+- name: Create mongod user
+  user: name=mongod comment="MongoD"
+
+- name: Create mongod mms user
+  user: name=mongodb-mms comment="MongoDB MMS"
+
+- name: Create Data Directories
+  file: path=/data state=directory mode=0755 owner=mongod group=mongod
+
+- name: Install XFS dependencies
+  yum: name=xfsprogs state=present
+  shell: mkfs.xfs /dev/sdb
+  mount: name=/data src=/dev/sdb fstype=xfs opts=defaults,noatime state=mounted
+
+- name: Create Data HEAD
+  file: path=/data/HEAD state=directory mode=0755 owner=mongodb-mms group=mongodb-mms
+
+- name: Create Data for app
+  file: path=/data/appdb state=directory mode=0755 owner=mongod group=mongod
+
+- name: Create Data backup
+  file: path=/data/backup state=directory mode=0755 owner=mongod group=mongod
+
+- name: Update all packages
+  yum: name=* state=latest
+
+- name: Install Latest MongoDB
+  yum: name=mongodb-org state=latest
+
+- name: Install mongodb shell
+  yum: name=mongodb-org-shell state=latest
+
+- name: Install gpg
+  yum: name=gpg state=latest
+
+- name: Launch Mongods for App
+  shell: sudo -u mongod mongod --port 27017 --dbpath /data/appdb --logpath /data/appdb/mongodb.log --fork
+
+- name: Launch Mongods for Backup
+  shell: sudo -u mongod mongod --port 27018 --dbpath /data/backup --logpath /data/backup/mongodb.log --fork
+
+- name: disable hugepage support
+  shell: /bin/echo never | /usr/bin/sudo /usr/bin/tee /sys/kernel/mm/transparent_hugepage/enabled
+
+- name: disable hugepage defrag
+  shell: /bin/echo never | /usr/bin/sudo /usr/bin/tee /sys/kernel/mm/transparent_hugepage/defrag
+
+- name: Get OpsManager Package
+  get_url: url=https://s3.amazonaws.com/mlynn/{{opsmanagerGPG}} dest=/home/ec2-user/{{opsmanagerGPG}}
+
+- name: Generate GPG
+  shell: echo 1234 | gpg --batch --passphrase-fd 0 {{opsmanagerGPG}}
+
+- name: Install Opsmanager package
+  yum: name=/home/ec2-user/{{opsmanager}} state=present
+
+- name: Start Service
+  service: name=mongodb-mms state=started

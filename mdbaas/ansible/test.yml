@@ -1,0 +1,6 @@
+---
+- hosts: mongodb
+  become: true
+  gather_facts: yes
+  roles:
+  - mlynn.mongodb-opsmgr

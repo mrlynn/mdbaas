@@ -22,7 +22,7 @@ products = [
 		ami: 'ami-6869aa05',
     title: 'Single, Small Instance of MongoDB',
     category: 'MongoDB',
-		instanceType: 't1.micro',
+		instanceType: 't2.small',
 		instanceCount: 1,
   	slug: 'mdbaas-small',
   	description: 'Smallest instance of MongoDB.  Suitable for development environments or playgrounds.',

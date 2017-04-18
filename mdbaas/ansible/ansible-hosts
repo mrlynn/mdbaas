@@ -1,0 +1,2 @@
+[mongodb]
+ec2-52-70-159-131.compute-1.amazonaws.com ansible_user=ec2-user

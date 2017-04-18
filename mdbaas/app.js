@@ -36,20 +36,30 @@ mongoose.connection.on('error', () => {
 });
 
 require('./config/passport');
-
+var hbs = expressHbs.create({
+    helpers: {
+        JSON: function(obj) {
+          return JSON.stringify(obj,null,2);
+        },
+        Upper: function(str) {
+          return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+    },
+    defaultLayout: 'layout',
+    extname: '.hbs',
+});
 // view engine setup
-app.engine('.hbs', expressHbs({defaultLayout: 'layout', extname: '.hbs'}));
+
+app.engine('.hbs', hbs.engine);
 app.set('view engine', '.hbs');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 app.use(cookieParser());
 app.use(session({
-  secret: 'asupersupersecret',
+  secret: 'asupersupersupersecret',
   resave: false,
   saveUninitialized: false,
   store: new MongoStore({

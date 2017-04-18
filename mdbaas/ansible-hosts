@@ -1,0 +1,9 @@
+[opsManager]
+ec2-107-20-0-9.compute-1.amazonaws.com ansible_user=ec2-user
+
+[mlynn]
+ec2-52-70-159-131.compute-1.amazonaws.com ansible_user=ec2-user
+
+[mlynn:vars]
+opsmanagerurl=http://ec2-107-20-0-9.compute-1.amazonaws.com:8080
+opsmanager=ec2-107-20-0-9.compute-1.amazonaws.com

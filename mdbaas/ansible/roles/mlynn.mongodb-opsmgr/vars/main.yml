@@ -1,0 +1,4 @@
+---
+# vars file for mlynn.mongodb-opsmgr
+opsmanagerGPG: mongodb-mms-3.4.3.402-1.x86_64.rpm.gpg
+opsmanager: mongodb-mms-3.4.3.402-1.x86_64.rpm
