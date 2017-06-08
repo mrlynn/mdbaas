@@ -7,15 +7,16 @@ var bodyParser = require('body-parser');
 var expressHbs = require('express-handlebars');
 var routes = require('./routes/index');
 var instances = require('./routes/instances');
+var adminRoutes = require('./routes/admin');
+
 var api = require('./routes/api');
 var users = require('./routes/users');
+var dotenv = require('dotenv');
 var mongoose = require('mongoose');
 var session = require('express-session');
 var passport = require('passport');
 var flash = require('connect-flash');
 var bcrypt = require('bcrypt');
-
-const dotenv = require('dotenv');
 const chalk = require('chalk');
 const async = require('async');
 var validator = require('express-validator');
@@ -81,6 +82,7 @@ app.use(function(req, res, next) {
 })
 
 app.use('/user', users);
+app.use('/instances', instances);
 app.use('/instance', instances);
 app.use('/api', api);
 app.use('/', routes);

@@ -22,26 +22,12 @@
 - name: Install gpg
   yum: name=gpg state=latest
 
-- name: Launch Mongods for App
-  shell: sudo -u mongod mongod --port 27017 --dbpath /data/appdb --logpath /data/appdb/mongodb.log --fork
-
-- name: Launch Mongods for Backup
-  shell: sudo -u mongod mongod --port 27018 --dbpath /data/backup --logpath /data/backup/mongodb.log --fork
-
 - name: disable hugepage support
   shell: /bin/echo never | /usr/bin/sudo /usr/bin/tee /sys/kernel/mm/transparent_hugepage/enabled
 
 - name: disable hugepage defrag
   shell: /bin/echo never | /usr/bin/sudo /usr/bin/tee /sys/kernel/mm/transparent_hugepage/defrag
 
-- name: Get OpsManager Package
-  get_url: url=https://s3.amazonaws.com/mlynn/{{opsmanagerGPG}} dest=/home/ec2-user/{{opsmanagerGPG}}
-
-- name: Generate GPG
-  shell: echo 1234 | gpg --batch --passphrase-fd 0 {{opsmanagerGPG}}
-
-- name: Install Opsmanager package
-  yum: name=/home/ec2-user/{{opsmanager}} state=present
-
-- name: Start Service
-  service: name=mongodb-mms state=started
+- service:
+  name: mongod
+  state: started

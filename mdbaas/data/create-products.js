@@ -17,6 +17,22 @@ mongoose.connection.on('error', () => {
 
 products = [
   new Product({
+  	imagePath: '/images/mdbaas-developer.png',
+    name: 'Developer Instance',
+		ami: 'ami-6869aa05',
+    title: 'Single, Developer-sized Instance of MongoDB',
+    category: 'MongoDB',
+		instanceType: 't2.small',
+		instanceCount: 1,
+  	slug: 'mdbaas-developer',
+  	description: 'Suitable for development environments or playgrounds.',
+    deploymentNotes: 'Ensure that you are not using this configuration in production.',
+    // Price we charge customers
+  	price: 10,
+    // Cost we pay for the product
+  	cost: 9
+  }),
+	new Product({
   	imagePath: '/images/mdbaas-small.png',
     name: 'Small Instance',
 		ami: 'ami-6869aa05',

@@ -3,7 +3,7 @@ var router = express.Router();
 var Ansible = require('node-ansible');
 
 // import entire SDK
-var AWS = require('aws-sdk');
+// var AWS = require('aws-sdk');
 // import AWS object without services
 var AWS = require('aws-sdk/global');
 // import individual service
@@ -23,8 +23,9 @@ var chalk = require('chalk');
 router.get('/playbook', isLoggedIn, function(req, res, next) {
 	var playbook = new Ansible.Playbook().playbook('playbooks/playbook-updates');
 	playbook.privateKey('/home/mlynn/.ssh/michael.lynn.pem')
-	playbook.inventory('ansible-hosts')
+	playbook.inventory('/etc/ansible/hosts')
 	playbook.verbose('vvvv');
+	playbook.limit('tag_Name_mlynn-mdbaas') // pick up here... mlynn
 	playbook.exec();
 	var promise = playbook.exec();
 	promise.then(function(successResult) {
@@ -48,10 +49,12 @@ router.get('/', isLoggedIn, function(req, res, next) {
 			console.log("IDX: " + idx);
 		}
 
+
+
 	var ec2 = new AWS.EC2({
 		apiVersion: '2016-11-15'
 	});
-
+	console.log("Instance Len:" + instances.length)
 	var params = {
 		InstanceIds: instances,
 		DryRun: false,
@@ -63,68 +66,72 @@ router.get('/', isLoggedIn, function(req, res, next) {
 			Values: ['michael.lynn']
 		}]
 	};
-	console.log("Params: " + params)
-	ec2.describeInstances(params, function(err, data) {
-		if (err) {
-			console.log(err, err.stack); // an error occurred
-		} else {
-			console.log(data); // successful response
-		}
-		console.log(JSON.stringify(data))
-		var instances = [];
-		var projects = [];
-		for (var i = 0, ilen = data.Reservations.length; i < ilen; i++) {
-			console.log("I: " + i);
-			console.log("Reservation: " + data.Reservations[i].ReservationId);
-			for (var j = 0, jlen = data.Reservations[i].Instances.length; j < jlen; j++) {
-				// console.log("Instance: " + data.Reservations[i].Instances[j].InstanceId);
-				// console.log(JSON.stringify(data.Reservations[i].Instances[j]));
-				live_instance = data.Reservations[i].Instances[j]
+	console.log("Params: " + JSON.stringify(params))
 
-				if (err) {
-					console.log("Error: " + err.message);
-					return err;
-				}
-				console.log("Instance saved");
-				var idx = instances.push(data.Reservations[i].Instances[j])-1
-				console.log("Instance " + idx + " " + JSON.stringify(data.Reservations[i].Instances[j]));
+	if (instances.length>0) {
 
-				for (var k = 0, klen = data.Reservations[i].Instances[j].Tags.length; k < klen; k++) {
-					var Key = data.Reservations[i].Instances[j].Tags[k].Key;
-					var Value = data.Reservations[i].Instances[j].Tags[k].Value;
-					console.log("Key: " + Key);
-					console.log("Value: " + Value);
-					console.log(JSON.stringify(instances[idx]));
-					if (Key == 'project') {
-						instances[idx].project = Value;
-					}
-					if (Key == 'owner') {
-						console.log("Instance " + idx + " " + JSON.stringify(instances[idx]));
-						instances[idx].owner = Value;
-					}
-					if (Key == 'Name') {
-						instances[idx].name = Value;
-					}
-					if (Key == 'expire-on') {
-						instances[idx].expires = Value;
-					}
-					// console.log("\t" + Key + ": " + Value);
-				}
-
-				if (!instances[idx].project) {
-					instances[idx].project == 'Unknown';
-				}
-				project = instances[idx].project;
-				idx = projects.indexOf(project);
-				if (idx == -1) {
-					projects.push(project);
-					idx = projects.indexOf(project);
-					projects[idx] = instances[i];
-				} else {
-					projects[idx] = instances[i];
-				}
+		ec2.describeInstances(params, function(err, data) {
+			if (err) {
+				console.log(err, err.stack); // an error occurred
+			} else {
+				console.log(data); // successful response
 			}
-		}
+			console.log(JSON.stringify(data))
+			var instances = [];
+			var projects = [];
+			for (var i = 0, ilen = data.Reservations.length; i < ilen; i++) {
+				console.log("I: " + i);
+				console.log("Reservation: " + data.Reservations[i].ReservationId);
+				for (var j = 0, jlen = data.Reservations[i].Instances.length; j < jlen; j++) {
+					// console.log("Instance: " + data.Reservations[i].Instances[j].InstanceId);
+					// console.log(JSON.stringify(data.Reservations[i].Instances[j]));
+					live_instance = data.Reservations[i].Instances[j]
+
+					if (err) {
+						console.log("Error: " + err.message);
+						return err;
+					}
+					console.log("Instance saved");
+					var idx = instances.push(data.Reservations[i].Instances[j])-1
+					console.log("Instance " + idx + " " + JSON.stringify(data.Reservations[i].Instances[j]));
+
+					for (var k = 0, klen = data.Reservations[i].Instances[j].Tags.length; k < klen; k++) {
+						var Key = data.Reservations[i].Instances[j].Tags[k].Key;
+						var Value = data.Reservations[i].Instances[j].Tags[k].Value;
+						console.log("Key: " + Key);
+						console.log("Value: " + Value);
+						console.log(JSON.stringify(instances[idx]));
+						if (Key == 'project') {
+							instances[idx].project = Value;
+						}
+						if (Key == 'owner') {
+							console.log("Instance " + idx + " " + JSON.stringify(instances[idx]));
+							instances[idx].owner = Value;
+						}
+						if (Key == 'Name') {
+							instances[idx].name = Value;
+						}
+						if (Key == 'expire-on') {
+							instances[idx].expires = Value;
+						}
+						// console.log("\t" + Key + ": " + Value);
+					}
+
+					if (!instances[idx].project) {
+						instances[idx].project == 'Unknown';
+					}
+					project = instances[idx].project;
+					idx = projects.indexOf(project);
+					if (idx == -1) {
+						projects.push(project);
+						idx = projects.indexOf(project);
+						projects[idx] = instances[i];
+					} else {
+						projects[idx] = instances[i];
+					}
+				}
+
+			}
 
 		res.render('instances', {
 			instances: instances,
@@ -135,8 +142,44 @@ router.get('/', isLoggedIn, function(req, res, next) {
 			isLoggedIn: req.isAuthenticated()
 		});
 	});
+} else {
+	res.render('instances', {
+		instances: instances,
+		errorMsg: "No instances available",
+		noErrorMsg: false,
+		successMsg: "",
+		noMessage: true,
+		isLoggedIn: req.isAuthenticated()
+	});
+}
 
 	});
+});
+
+router.get('/stop/:instanceId', isLoggedIn, function(req, res, next) {
+	var instanceId = req.params.instanceId;
+	var params = {
+	  InstanceIds: [instanceId],
+	  DryRun: true
+	};
+
+  // call EC2 to start the selected instances
+  ec2.startInstances(params, function(err, data) {
+    if (err && err.code === 'DryRunOperation') {
+      params.DryRun = false;
+      ec2.stopInstances(params, function(err, data) {
+          if (err) {
+            console.log("Error", err);
+          } else if (data) {
+            console.log("Success", data.StartingInstances);
+          }
+      });
+    } else {
+      console.log("You don't have permission to start instances.");
+			req.flash(error, "You don't have permission to stop instances");
+			res.redirect('/');
+    }
+  });
 });
 
 router.post('/launch', isLoggedIn, function(req, res, next) {

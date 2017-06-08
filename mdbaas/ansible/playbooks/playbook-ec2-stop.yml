@@ -1,0 +1,12 @@
+- name: Stop instances
+  hosts: localhost
+  gather_facts: false
+  become: true
+  connection: local
+  tasks:
+    - name: Stop the instances
+      ec2:
+        instance_ids: 'i-0293c94a65416c83b'
+        region: 'us-east-1'
+        state: stopped
+        wait: True

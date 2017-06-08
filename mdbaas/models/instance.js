@@ -1,6 +1,3 @@
-
-
-
 var mongoose = require('mongoose');
 require('mongoose-currency').loadType(mongoose);
 var Currency = mongoose.Types.Currency;
