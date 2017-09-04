@@ -50,6 +50,10 @@ RDBMS systems were created during a time when computing resources were extremely
 
 MongoDB was created to address the gap between the world of relational database technologies and the world we live in today - where the volume, velocity and variety of data is quite different than when RDBMS was created.
 
+## Why not just use MongoDB Atlas? ##
+
+In fact, you should.  Stop reading this and go check out [MongoDB Atlas](https://mongodb.com/cloud/atlas).  However, if after checking out Atlas, you find that you require greater control over the service you vend to your internal customers, perhaps this repo and the information contained herein will be interesting.
+
 __Flexibility__
 
 | RDBMS                        |         MongoDB                     |
