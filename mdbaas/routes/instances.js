@@ -320,7 +320,7 @@ function waitAndKickAnsible(instanceId) {
       // run ansible
       var playbook = new Ansible.Playbook().playbook('ansible/playbooks/playbook-automation-agent-standalone');
       playbook.inventory(host + ",")
-      playbook.variables({'opsmanagerurl': config.opsManagerUrl, 'autoagent': 'mongodb-mms-automation-agent-manager-4.4.1.2267-1.x86_64.rpm','groupId': config.groupId, 'apiKey': config.apiKey})
+      playbook.variables({'opsmanagerurl': config.opsManagerUrl, 'autoagent': 'mongodb-mms-automation-agent-manager-latest.x86_64.rpm','groupId': config.groupId, 'apiKey': config.apiKey})
       playbook.verbose('vvvv');
       playbook.exec();
       var promise = playbook.exec();
