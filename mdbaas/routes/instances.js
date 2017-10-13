@@ -16,6 +16,7 @@ var mongoose = require('mongoose');
 var dotenv = require('dotenv');
 var chalk = require('chalk');
 var config = require('../config/config.js');
+var request = require('request');
 // var csrf = require('csurf');
 
 // var csrfProtection = csrf();
@@ -310,8 +311,13 @@ function waitAndKickAnsible(instanceId) {
     console.log(JSON.stringify(data));
     console.log(err);
     if (data && data.Reservations[0].Instances[0].State.Code == 16) {
+      // configure ops manager
+      host = data.Reservations[0].Instances[0].PublicDnsName;
+      hostname = data.Reservations[0].Instances[0].PrivateDnsName;
+      clusterName = hostname.split('.')[0].replace('-', '');
+      configureOpsManager(hostname, clusterName)
+
       // run ansible
-      host = data.Reservations[0].Instances[0].PublicDnsName
       var playbook = new Ansible.Playbook().playbook('ansible/playbooks/playbook-automation-agent-standalone');
       playbook.inventory(host + ",")
       playbook.variables({'opsmanagerurl': config.opsManagerUrl, 'autoagent': 'mongodb-mms-automation-agent-manager-4.4.1.2267-1.x86_64.rpm','groupId': config.groupId, 'apiKey': config.apiKey})
@@ -321,6 +327,7 @@ function waitAndKickAnsible(instanceId) {
       promise.then(function(successResult) {
         console.log(successResult.code); // Exit code of the executed command
         console.log(successResult.output) // Standard output/error of the executed command
+
       }, function(error) {
         console.error(error);
       })
@@ -328,6 +335,84 @@ function waitAndKickAnsible(instanceId) {
       setTimeout(waitAndKickAnsible, 5000, instanceId);
     }
   });
+}
+
+function configureOpsManager(hostname, clusterName) {
+  url = config.opsManagerUrl + "/api/public/v1.0/groups/" + config.groupId + "/automationConfig";
+  console.log(url)
+  request.get(url, function(e, r, data) {
+    automation = JSON.parse(data)
+    console.log(automation);
+    newProcess =  {
+      "args2_6": {
+        "net": {
+          "port": 27017
+        },
+        "replication": {
+          "replSetName": clusterName
+        },
+        "storage": {
+          "dbPath": "/tmp"
+        },
+        "systemLog": {
+          "destination": "file",
+          "path": "/tmp/mongod.log"
+        },
+        "logRotate": {
+          "sizeThresholdMB": 1000,
+          "timeThresholdHrs": 24
+        }
+      },
+      "authSchemaVersion": 5,
+      "featureCompatibilityVersion": "3.4",
+      "hostname": hostname,
+      "name": clusterName,
+      "processType": "mongod",
+      "version": "3.4.9"
+    };
+
+    newMonitoringAgent = {
+      "hostname": hostname,
+      "logPath": "/var/log/mongodb-mms-automation/monitoring-agent.log",
+      "logRotate": {
+        "sizeThresholdMB": 1024,
+        "timeThresholdHrs": 24
+      }
+    }
+
+    newReplica = {
+      "_id": clusterName,
+      "members": [
+      {
+        "_id": 0,
+        "arbiterOnly": false,
+        "hidden": false,
+        "host": clusterName,
+        "priority": 1,
+        "slaveDelay": 0,
+        "votes": 1
+      }
+      ]
+    }
+
+    automation.processes.push(newProcess);
+    automation.replicaSets.push(newReplica);
+    automation.monitoringVersions.push(newMonitoringAgent);
+
+    console.log(automation);
+
+    request({
+      "method": "PUT",
+      "uri": url,
+      "headers": {
+        'content-type': 'application/json',
+      },
+      'body': JSON.stringify(automation)
+    }, function(error, response, body) {
+      console.log(error);
+      console.log(body);
+    }).auth(config.opsManagerUser, config.opsManagerApiKey, false)
+  }).auth(config.opsManagerUser, config.opsManagerApiKey, false)
 }
 
 function isLoggedIn(req, res, next) {
