@@ -44,7 +44,7 @@ There are countless ways to implement Database as a Service.  What's contained i
 
 ## Why use MongoDB? ##
 
-NoSQL solutions address a very import gap that existed in the market.  MongoDB was created to specifically address the gap in features that was created by the changing technology world.  Prior to NoSQL and MongoDB, the data world was dominated by Relational Database Management Systems (RDBMS).  
+NoSQL solutions address a very import gap that existed in the market.  MongoDB was created to specifically address the gap in features that was created by the changing technology world.  Prior to NoSQL and MongoDB, the data world was dominated by Relational Database Management Systems (RDBMS).
 
 RDBMS systems were created during a time when computing resources were extremely expensive.  Disk, memory and CPU were massively expensive, especially in relation to the compensation we paid to the developers and dba's responsible for developing, and managing this data.
 
@@ -105,17 +105,20 @@ check out the Quickstart section in the [developer guide](https://boto3.readthed
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+A step by step series of examples that tell you have to get a development env running. Before installing MDBaaS, be aware that you must have Ansible installed.
 
 ```sh
 $ git clone git://github.com/mrlynn/mdbaas.git
 $ npm install
 $ cp .env.example .env
+$ vi .env
+$ cp config/config.example.js config/config.js
+$ vi config/config.js
 $ mkdir ~/.aws
 $ echo "[default]" > ~/.aws/credentials
 $ echo "aws_access_key_id = OKIART2LTDTXUQPOLGGZNJQ" >> ~/.aws/credentials
 $ echo "aws_secret_access_key = +1z4Mg99h93ryYcejkerk5iix4BLika++7KjFoVZ" >> ~/.aws/credentials
-$ echo npm start
+$ npm start
 ```
 
 Then visit [http://localhost:3000/](http://localhost:3000/)
@@ -159,6 +162,7 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduc
 ## Authors
 
 * **Michael Lynn** - *Initial work* - [MongoDB](https://mongodb.com/)
+* **Damien Gasoaruba** - *Include Ops Manager API* - [MongoDB](https://mongodb.com/)
 
 ## License
 

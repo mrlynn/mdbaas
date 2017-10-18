@@ -1,0 +1,19 @@
+---
+- hosts: all
+  remote_user: ec2-user
+  become: yes
+  tasks:
+  - name: download automation agent
+    get_url: url="{{opsmanagerurl}}/download/agent/automation/{{autoagent}}" dest="/home/ec2-user/{{autoagent}}"
+  - name: install automation agent
+    yum: name=/home/ec2-user/{{autoagent}} state=present
+  - name: update config mmsGroupId
+    shell: perl -pi -e "s/^mmsGroupId=.*$/mmsGroupId={{groupId}}/" /etc/mongodb-mms/automation-agent.config
+  - name: update config mmsApiKey
+    shell: perl -pi -e "s/^mmsApiKey=.*$/mmsApiKey={{apiKey}}/" /etc/mongodb-mms/automation-agent.config
+  - name: update config mmsBaseUrl
+    shell: perl -pi -e "s|^mmsBaseUrl=.*$|mmsBaseUrl={{opsmanagerurl}}|" /etc/mongodb-mms/automation-agent.config
+  - name: setup data directory
+    file: path=/data state=directory mode=0755 owner=mongod group=mongod
+  - name: start agent
+    service: name=mongodb-mms-automation-agent state=started

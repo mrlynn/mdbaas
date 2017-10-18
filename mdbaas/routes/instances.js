@@ -15,17 +15,17 @@ var Instance = require('../models/instance');
 var mongoose = require('mongoose');
 var dotenv = require('dotenv');
 var chalk = require('chalk');
+var config = require('../config/config.js');
+var request = require('request');
 // var csrf = require('csurf');
 
 // var csrfProtection = csrf();
 // router.use(csrfProtection);
 
 router.get('/playbook', isLoggedIn, function(req, res, next) {
-	var playbook = new Ansible.Playbook().playbook('playbooks/playbook-updates');
-	playbook.privateKey('/home/mlynn/.ssh/michael.lynn.pem')
-	playbook.inventory('/etc/ansible/hosts')
+	var playbook = new Ansible.Playbook().playbook('ansible/playbooks/playbook-updates');
+	playbook.inventory(config.inventory)
 	playbook.verbose('vvvv');
-	playbook.limit('tag_Name_mlynn-mdbaas') // pick up here... mlynn
 	playbook.exec();
 	var promise = playbook.exec();
 	promise.then(function(successResult) {
@@ -35,11 +35,12 @@ router.get('/playbook', isLoggedIn, function(req, res, next) {
 		console.error(error);
 	})
 })
+
 /* GET instances . */
 router.get('/', isLoggedIn, function(req, res, next) {
 	/* GET instances . */
 	AWS.config.update({
-		region: 'us-east-1'
+		region: config.region
 	});
 	// re-read because a new instance may have been launched
   User.findOne({_id: req.user._id}, function(err,user_doc) {
@@ -63,7 +64,7 @@ router.get('/', isLoggedIn, function(req, res, next) {
 			Values: ['running']
 		}, {
 			Name: 'tag:owner',
-			Values: ['michael.lynn']
+			Values: [config.owner]
 		}]
 	};
 	console.log("Params: " + JSON.stringify(params))
@@ -185,7 +186,7 @@ router.get('/stop/:instanceId', isLoggedIn, function(req, res, next) {
 router.post('/launch', isLoggedIn, function(req, res, next) {
 	productId = req.body.productId;
 	AWS.config.update({
-		region: 'us-east-1'
+		region: config.region
 	});
 
 	memory = req.body.memory;
@@ -209,13 +210,12 @@ router.post('/launch', isLoggedIn, function(req, res, next) {
 			});
 
 			var params = {
-				// ImageId: 'ami-6869aa05', // amzn-ami-2011.09.1.x86_64-ebs
-				ImageId: product.ami, // amzn-ami-2011.09.1.x86_64-ebs
+				ImageId: product.ami,
 				InstanceType: product.instanceType,
 				MinCount: product.instanceCount,
 				MaxCount: product.instanceCount,
 				KeyName: req.user.keyName,
-				SecurityGroupIds: ['mlynn-default']
+				SecurityGroupIds: [config.securityGroup]
 			};
 
 			// Create the instance
@@ -256,19 +256,19 @@ router.post('/launch', isLoggedIn, function(req, res, next) {
 					Resources: [instanceId],
 					Tags: [{
 							Key: 'Name',
-							Value: 'mlynn-mdbaas' + '-' + req.body.project
+							Value: 'mdbaas' + '-' + req.body.project
 						},
 						{
 							Key: 'project',
-							Value: 'mlynn-mdbaas'
+							Value: config.project
 						},
 						{
 							Key: 'owner',
-							Value: 'michael.lynn'
+							Value: config.owner
 						},
 						{
 							Key: 'expire-on',
-							Value: '2017-08-01'
+							Value: config.expireOn
 						},
 						{
 							Key: 'mdbaas-expcode',
@@ -283,24 +283,148 @@ router.post('/launch', isLoggedIn, function(req, res, next) {
 						res.redirect('/');
 					}
 					res.redirect('/instance');
-				});
-			});
-		});
-	}); // User Find
+        });
+
+        setTimeout(waitAndKickAnsible, 180000, instanceId);
+
+      });
+    });
+  }); // User Find
 })
 
 module.exports = router;
 
+function waitAndKickAnsible(instanceId) {
+
+  var ec2 = new AWS.EC2({
+    apiVersion: '2016-11-15'
+  });
+
+  var params = {
+    DryRun: false,
+    InstanceIds: [
+      instanceId
+    ]
+  };
+
+  ec2.describeInstances(params, function(err, data) {
+    console.log(JSON.stringify(data));
+    console.log(err);
+    if (data && data.Reservations[0].Instances[0].State.Code == 16) {
+      // configure ops manager
+      host = data.Reservations[0].Instances[0].PublicDnsName;
+      hostname = data.Reservations[0].Instances[0].PrivateDnsName;
+      clusterName = hostname.split('.')[0].replace('-', '');
+      configureOpsManager(hostname, clusterName)
+
+      // run ansible
+      var playbook = new Ansible.Playbook().playbook('ansible/playbooks/playbook-automation-agent-standalone');
+      playbook.inventory(host + ",")
+      playbook.variables({'opsmanagerurl': config.opsManagerUrl, 'autoagent': 'mongodb-mms-automation-agent-manager-latest.x86_64.rpm','groupId': config.groupId, 'apiKey': config.apiKey})
+      playbook.verbose('vvvv');
+      playbook.exec();
+      var promise = playbook.exec();
+      promise.then(function(successResult) {
+        console.log(successResult.code); // Exit code of the executed command
+        console.log(successResult.output) // Standard output/error of the executed command
+
+      }, function(error) {
+        console.error(error);
+      })
+    } else {
+      setTimeout(waitAndKickAnsible, 5000, instanceId);
+    }
+  });
+}
+
+function configureOpsManager(hostname, clusterName) {
+  url = config.opsManagerUrl + "/api/public/v1.0/groups/" + config.groupId + "/automationConfig";
+  console.log(url)
+  request.get(url, function(e, r, data) {
+    automation = JSON.parse(data)
+    console.log(automation);
+    newProcess =  {
+      "args2_6": {
+        "net": {
+          "port": 27017
+        },
+        "replication": {
+          "replSetName": clusterName
+        },
+        "storage": {
+          "dbPath": "/tmp"
+        },
+        "systemLog": {
+          "destination": "file",
+          "path": "/tmp/mongod.log"
+        },
+        "logRotate": {
+          "sizeThresholdMB": 1000,
+          "timeThresholdHrs": 24
+        }
+      },
+      "authSchemaVersion": 5,
+      "featureCompatibilityVersion": "3.4",
+      "hostname": hostname,
+      "name": clusterName,
+      "processType": "mongod",
+      "version": "3.4.9"
+    };
+
+    newMonitoringAgent = {
+      "hostname": hostname,
+      "logPath": "/var/log/mongodb-mms-automation/monitoring-agent.log",
+      "logRotate": {
+        "sizeThresholdMB": 1024,
+        "timeThresholdHrs": 24
+      }
+    }
+
+    newReplica = {
+      "_id": clusterName,
+      "members": [
+      {
+        "_id": 0,
+        "arbiterOnly": false,
+        "hidden": false,
+        "host": clusterName,
+        "priority": 1,
+        "slaveDelay": 0,
+        "votes": 1
+      }
+      ]
+    }
+
+    automation.processes.push(newProcess);
+    automation.replicaSets.push(newReplica);
+    automation.monitoringVersions.push(newMonitoringAgent);
+
+    console.log(automation);
+
+    request({
+      "method": "PUT",
+      "uri": url,
+      "headers": {
+        'content-type': 'application/json',
+      },
+      'body': JSON.stringify(automation)
+    }, function(error, response, body) {
+      console.log(error);
+      console.log(body);
+    }).auth(config.opsManagerUser, config.opsManagerApiKey, false)
+  }).auth(config.opsManagerUser, config.opsManagerApiKey, false)
+}
+
 function isLoggedIn(req, res, next) {
-	if (req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect('/');
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
 }
 
 function notLoggedIn(req, res, next) {
-	if (!req.isAuthenticated()) {
-		return next();
-	}
-	res.redirect('/');
+  if (!req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/');
 }
