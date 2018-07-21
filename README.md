@@ -116,8 +116,8 @@ $ cp config/config.example.js config/config.js
 $ vi config/config.js
 $ mkdir ~/.aws
 $ echo "[default]" > ~/.aws/credentials
-$ echo "aws_access_key_id = OKIART2LTDTXUQPOLGGZNJQ" >> ~/.aws/credentials
-$ echo "aws_secret_access_key = +1z4Mg99h93ryYcejkerk5iix4BLika++7KjFoVZ" >> ~/.aws/credentials
+$ echo "aws_access_key_id = ONOTAREALKEYART2NOTAREALKEY" >> ~/.aws/credentials
+$ echo "aws_secret_access_key = +1n4Mo99t93reallyYcejkeyiix4BLika++7KjFoVZ" >> ~/.aws/credentials
 $ npm start
 ```
 
