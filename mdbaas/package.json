@@ -13,7 +13,7 @@
     "aws-sdk": "2.404.0",
     "bcrypt": "1.0.3",
     "bcrypt-nodejs": "0.0.3",
-    "body-parser": "1.15.2",
+    "body-parser": "1.18.3",
     "chalk": "1.1.3",
     "connect-flash": "0.1.1",
     "connect-mongo": "1.3.2",
