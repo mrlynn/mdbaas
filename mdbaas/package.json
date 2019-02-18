@@ -31,7 +31,7 @@
     "logger": "0.0.1",
     "mongoose": "4.13.18",
     "mongoose-currency": "0.2.0",
-    "morgan": "1.7.0",
+    "morgan": "1.9.1",
     "node-ansible": "0.5.5",
     "node-uuid": "1.4.8",
     "nodemon": "1.18.10",
