@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "async": "2.6.2",
-    "aws-sdk": "2.412.0",
+    "aws-sdk": "2.413.0",
     "bcrypt": "1.0.3",
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "1.18.3",
