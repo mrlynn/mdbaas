@@ -41,6 +41,6 @@
     "serve-favicon": "2.3.2"
   },
   "devDependencies": {
-    "@types/node": "7.10.3"
+    "@types/node": "7.10.5"
   }
 }
