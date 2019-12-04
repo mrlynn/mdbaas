@@ -9,7 +9,7 @@
     "production": "NODE_ENV=production nodemon ./bin/www"
   },
   "dependencies": {
-    "async": "2.6.2",
+    "async": "2.6.3",
     "aws-sdk": "2.441.0",
     "bcrypt": "3.0.7",
     "bcrypt-nodejs": "0.0.3",
