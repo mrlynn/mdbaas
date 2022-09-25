@@ -35,7 +35,7 @@
     "node-ansible": "0.5.5",
     "node-uuid": "1.4.8",
     "nodemon": "2.0.2",
-    "passport": "0.4.1",
+    "passport": "0.6.0",
     "passport-local": "1.0.0",
     "request": "2.88.0",
     "serve-favicon": "2.5.0"
