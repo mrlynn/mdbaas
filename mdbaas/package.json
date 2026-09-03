@@ -34,7 +34,7 @@
     "morgan": "1.9.1",
     "node-ansible": "0.5.5",
     "node-uuid": "1.4.8",
-    "nodemon": "2.0.2",
+    "nodemon": "2.0.22",
     "passport": "0.4.1",
     "passport-local": "1.0.0",
     "request": "2.88.0",
