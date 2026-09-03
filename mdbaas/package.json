@@ -38,7 +38,7 @@
     "passport": "0.4.1",
     "passport-local": "1.0.0",
     "request": "2.88.0",
-    "serve-favicon": "2.5.0"
+    "serve-favicon": "2.5.1"
   },
   "devDependencies": {
     "@types/node": "7.10.9"
